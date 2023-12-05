@@ -1,0 +1,48 @@
+﻿@page "/manage-product"
+@rendermode InteractiveAuto
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card">
+				<div class="card-header">Add Product</div>
+				<duv class="card-body">
+					<EditForm Model="ProductModel" OnValidSubmit="HandleSave" FormName="manageProduct">
+						<DataAnnotationsValidator/>
+						<ValidationSummary/>
+						<div class="form-group">
+							<label class="form-label">Product Name</label>
+							<InputText @bind-Value="ProductModel.Name" class="form-control"></InputText>
+							<ValidationMessage For="()=>ProductModel.Name"></ValidationMessage>
+						</div>
+						<div class="form-group">
+							<label class="form-label">Product Quantity</label>
+							<InputNumber @bind-Value="ProductModel.Quantity" class="form-control"></InputNumber>
+							<ValidationMessage For="()=>ProductModel.Quantity"></ValidationMessage>
+						</div>
+						<button type="submit" class="btn btn-primary">Save</button>
+					</EditForm>
+				</duv>
+				<div class="card-footer">
+					Id: @ReturnProduct.Id <br />
+					Name: @ReturnProduct.Name <br />
+					Quantity @ReturnProduct.Quantity
+				</div>
+			</div>
+
+			
+		</div>
+	</div>
+</div>
+
+@code {
+	[SupplyParameterFromForm]
+	public Product ProductModel { get; set; } = new();
+	private Product ReturnProduct = new();
+
+	private async Task HandleSave()
+	{
+		ReturnProduct = await ProductService.AddProductAsync(ProductModel);
+		//await js.InvokeVoidAsync("alert", $"Id: {result.Id}{Environment.NewLine}Name: {result.Name}{Environment.NewLine}Quantity: {result.Quantity}");
+	}
+}
